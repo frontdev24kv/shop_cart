@@ -2,18 +2,24 @@ import { useState } from "react";
 
 import initialState from "./assets/products.json";
 import ProductCard from "./components/ProductCard";
+import { CartPage } from "./pages/CartPage";
 
 const App = () => {
   const [products, setProducts] = useState(initialState);
   const [cart, setCart] = useState([]);
+  const [isOpenCart, setIsOpenCart] = useState(false)
 
   const addGoodToCart = (product) => {
     setCart((prev) => [...prev, product]);
   };
+
+  const removeGood = (product) => {
+    setCart(prev => prev.filter(pr => pr !== product))
+  }
   return (
     <div className="min-h-dvh bg-slate-50">
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur">
+        <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 backdrop-blur">
           <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
             <a
               href="#"
@@ -23,6 +29,7 @@ const App = () => {
             </a>
 
             <a
+              onClick={() => setIsOpenCart(true)}
               href="#"
               className="relative inline-flex items-center gap-2 text-sm font-semibold text-slate-900 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
             >
@@ -33,6 +40,7 @@ const App = () => {
             </a>
           </nav>
         </header>
+        {isOpenCart && <CartPage cart={cart} setIsOpenCart={setIsOpenCart} removeGood={removeGood}/>}
         <ul className="list-none flex flex-wrap gap-6">
           {products.map((good, i) => (
             <li key={i} className="w-full sm:w-50 lg:w-100">
